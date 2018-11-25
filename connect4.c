@@ -69,8 +69,6 @@ int main(void)
 		    thisGame.turn % 2 == 0 ? thisGame.playerOne : thisGame.playerTwo);
 	}
 
-	// free(playerName);?????????
-
 	return 0;
 }
 
@@ -83,6 +81,8 @@ char * playerName(void) {
 	scanf(" %s", playerName);
 
 	return playerName;
+
+	free(playerName);
 }
 
 /************************************/
