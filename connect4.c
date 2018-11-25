@@ -88,7 +88,7 @@ char * playerName(void) {
 /************************************/
 
 void drawBoard(void) {
-	printf("\n\n\n");
+	printf("\n\n");
 	printf("   a b c d e f g\n");
 	for (int i = 0; i < BOARD_ROWS; i++) {
 		printf("   %c %c %c %c %c %c %c\n", 
@@ -175,7 +175,8 @@ int win(void) {
 
 			 	thisGame.board[(y * BOARD_COLUMNS) + x + 14] == 
 			 	thisGame.board[(y * BOARD_COLUMNS) + x + 21]) {
-				printf("\n\n\nChecking for win... \n\n\n - %c wins vertically!\n", 
+				printf("\n\n\nChecking for win... \n\n\n - %c "
+					"wins vertically!\n", 
 					thisGame.board[(y * BOARD_COLUMNS) + x + 21]);
 				return 1;
 			}
@@ -195,7 +196,8 @@ int win(void) {
 
 			 	thisGame.board[(y * BOARD_COLUMNS) + x + 2] == 
 			 	thisGame.board[(y * BOARD_COLUMNS) + x + 3]) {
-				printf("\n\n\nChecking for win... \n\n\n - %c wins horizontally!\n", 
+				printf("\n\n\nChecking for win... \n\n\n - %c "
+					"wins horizontally!\n", 
 					thisGame.board[(y * BOARD_COLUMNS) + x + 3]);
 				return 1;
 	        }
@@ -215,7 +217,8 @@ int win(void) {
 
 			 	thisGame.board[(y * BOARD_COLUMNS) + x + 16] == 
 			 	thisGame.board[(y * BOARD_COLUMNS) + x + 24]) {
-				printf("\n\n\nChecking for win... \n\n\n - %c wins back-slash diagonally!\n", 
+				printf("\n\n\nChecking for win... \n\n\n - %c "
+					"wins back-slash diagonally!\n", 
 					thisGame.board[(y * BOARD_COLUMNS) + x + 24]);
 				return 1;
 			}
@@ -236,7 +239,8 @@ int win(void) {
 
 			 	thisGame.board[(y * BOARD_COLUMNS) + x + 12] == 
 			 	thisGame.board[(y * BOARD_COLUMNS) + x + 18]) {
-				printf("\n\n\nChecking for win... \n\n\n - %c wins forward-slash diaginally!\n", 
+				printf("\n\n\nChecking for win... \n\n\n - %c "
+					"wins forward-slash diaginally!\n", 
 					thisGame.board[(y * BOARD_COLUMNS) + x + 18]);
 				return 1;
 			}
