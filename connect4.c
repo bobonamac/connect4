@@ -60,10 +60,12 @@ int main(void)
 	drawBoard();
 
 	if (win() == 2) {
+		drawBoard();
 		printf("Play again soon!\n\n");
 	}
 	else {
-		printf("Way to go, %s!!!\n\n",
+		drawBoard();
+		printf("\nWay to go, %s!!!\n\n",
 		    thisGame.turn % 2 == 0 ? thisGame.playerOne : thisGame.playerTwo);
 	}
 
@@ -86,14 +88,17 @@ char * playerName(void) {
 /************************************/
 
 void drawBoard(void) {
-	printf("\n");
-	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+	printf("\n\n\n");
 	printf("   a b c d e f g\n");
 	for (int i = 0; i < BOARD_ROWS; i++) {
-		printf("   %c %c %c %c %c %c %c\n", thisGame.board[i * BOARD_COLUMNS + 0], 
-			thisGame.board[i * BOARD_COLUMNS + 1], thisGame.board[i * BOARD_COLUMNS + 2], 
-			thisGame.board[i * BOARD_COLUMNS + 3], thisGame.board[i * BOARD_COLUMNS + 4], 
-		    thisGame.board[i * BOARD_COLUMNS + 5], thisGame.board[i * BOARD_COLUMNS + 6]);
+		printf("   %c %c %c %c %c %c %c\n", 
+			thisGame.board[i * BOARD_COLUMNS + 0], 
+			thisGame.board[i * BOARD_COLUMNS + 1], 
+			thisGame.board[i * BOARD_COLUMNS + 2], 
+			thisGame.board[i * BOARD_COLUMNS + 3], 
+			thisGame.board[i * BOARD_COLUMNS + 4], 
+		    thisGame.board[i * BOARD_COLUMNS + 5], 
+		    thisGame.board[i * BOARD_COLUMNS + 6]);
 	}
 	printf("\n");
 
@@ -116,7 +121,8 @@ void promptMove(void) {
 			scanf("%*s");	
 		}
 	}
-	while (scanVal == 0 || ((thisGame.move < ASCII_A) || (thisGame.move > ASCII_g)) || 
+	while (scanVal == 0 || ((thisGame.move < ASCII_A) || 
+		  (thisGame.move > ASCII_g)) || 
 		  ((thisGame.move > ASCII_G) && (thisGame.move < ASCII_a)) ||
 	      (checkMove() == 1));
 
@@ -155,8 +161,6 @@ int checkMove (void) {
 
 int win(void) {
 
-	// printf("win() called*********\n");
-
 	// check for vertical win
 	for (int x = 0; x < 7; x++) {
 		for (int y = 0; y < 3; y++) {
@@ -171,13 +175,9 @@ int win(void) {
 
 			 	thisGame.board[(y * BOARD_COLUMNS) + x + 14] == 
 			 	thisGame.board[(y * BOARD_COLUMNS) + x + 21]) {
-				printf("Checking for win - %c wins vertically!\n", 
-					thisGame.board[0]);
+				printf("\n\n\nChecking for win... \n\n\n - %c wins vertically!\n", 
+					thisGame.board[(y * BOARD_COLUMNS) + x + 21]);
 				return 1;
-			}
-
-			else {
-				// printf("Vertical check x=%i, y=%i\n", x, y);
 			}
 		}
 	}
@@ -195,16 +195,12 @@ int win(void) {
 
 			 	thisGame.board[(y * BOARD_COLUMNS) + x + 2] == 
 			 	thisGame.board[(y * BOARD_COLUMNS) + x + 3]) {
-				printf("Checking for win - %c wins horizontally!\n", thisGame.board[0]);
-				// printf("Last element: %c\n", thisGame.board[(y * BOARD_COLUMNS) + x + 3]);
+				printf("\n\n\nChecking for win... \n\n\n - %c wins horizontally!\n", 
+					thisGame.board[(y * BOARD_COLUMNS) + x + 3]);
 				return 1;
-	        }
-	        else {
-	        	// printf("horizontal checkx=%i, y=%i\n", x, y);
 	        }
 		}
 	}
-
 	// check for back-slant diaginal win 
 	for (int y = 0; y < 3; y++) {
 		for (int x = 0; x < 3; x++) {
@@ -219,20 +215,16 @@ int win(void) {
 
 			 	thisGame.board[(y * BOARD_COLUMNS) + x + 16] == 
 			 	thisGame.board[(y * BOARD_COLUMNS) + x + 24]) {
-				printf("Checking for win - %c wins vertically!\n", 
-					thisGame.board[0]);
+				printf("\n\n\nChecking for win... \n\n\n - %c wins back-slash diagonally!\n", 
+					thisGame.board[(y * BOARD_COLUMNS) + x + 24]);
 				return 1;
-			}
-
-			else {
-				// printf("back-slant check x=%i, y=%i\n", x, y);
 			}
 		}
 	}
 
 	// check for forward-slant diaginal win 
 	for (int y = 0; y < 3; y++) {
-		for (int x = 0; x < 3; x++) {
+		for (int x = 3; x < 7; x++) {
 			if (thisGame.board[(y * BOARD_COLUMNS) + x + 0] != 
 				ASCII_FULL_STOP &&	
 
@@ -244,40 +236,22 @@ int win(void) {
 
 			 	thisGame.board[(y * BOARD_COLUMNS) + x + 12] == 
 			 	thisGame.board[(y * BOARD_COLUMNS) + x + 18]) {
-				printf("Checking for win - %c wins vertically!\n", 
-					thisGame.board[0]);
+				printf("\n\n\nChecking for win... \n\n\n - %c wins forward-slash diaginally!\n", 
+					thisGame.board[(y * BOARD_COLUMNS) + x + 18]);
 				return 1;
-			}
-
-			else {
-				// printf("forward-slant check x=%i, y=%i\n", x, y);
 			}
 		}
 	}
 
-	
-	// if (thisGame.board[0] == thisGame.board[4] && 
-	// 	thisGame.board[4] == thisGame.board[8] && 
-	// 	thisGame.board[0] != ASCII_FULL_STOP) {
-	// 	printf("Checking for win - %c wins diagonally!\n", thisGame.board[0]);
-	// 	return 1;
-	// }
-	// // check for forward-slant diaginal win
-	// else if (thisGame.board[2] == thisGame.board[4] && 
-	// 		 thisGame.board[4] == thisGame.board[6] && 
-	// 		 thisGame.board[2] != ASCII_FULL_STOP) {
-	// 	printf("Checking for win - %c wins diagonally!\n", thisGame.board[2]);
-	// 	return 1;
-	// }
 	// check for no winner
 	if (thisGame.turn > MAX_MOVES) {
-		printf("Checking for win - no winner.\n");
+		printf("\n\n\nChecking for win... \n\n\n - no winner.\n");
 		return 2;
 	}
 	else {
 		// prevents this message befor first move is made
 		if (thisGame.turn > 1) {
-			printf("\nChecking for win - no win\n");
+			printf("\n\n\nChecking for win... \n\n\n     - no win\n");
 		}
 		return 0;
 	}	
