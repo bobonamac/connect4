@@ -87,6 +87,7 @@ char * playerName(void) {
 
 void drawBoard(void) {
 	printf("\n");
+	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 	printf("   a b c d e f g\n");
 	for (int i = 0; i < BOARD_ROWS; i++) {
 		printf("   %c %c %c %c %c %c %c\n", thisGame.board[i * BOARD_COLUMNS + 0], 
@@ -154,7 +155,7 @@ int checkMove (void) {
 
 int win(void) {
 
-	printf("win() called*********\n");
+	// printf("win() called*********\n");
 
 	// check for vertical win
 	for (int x = 0; x < 7; x++) {
@@ -195,7 +196,7 @@ int win(void) {
 			 	thisGame.board[(y * BOARD_COLUMNS) + x + 2] == 
 			 	thisGame.board[(y * BOARD_COLUMNS) + x + 3]) {
 				printf("Checking for win - %c wins horizontally!\n", thisGame.board[0]);
-				printf("Last element: %c\n", thisGame.board[(y * BOARD_COLUMNS) + x + 3]);
+				// printf("Last element: %c\n", thisGame.board[(y * BOARD_COLUMNS) + x + 3]);
 				return 1;
 	        }
 	        else {
