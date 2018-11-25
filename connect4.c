@@ -205,7 +205,7 @@ int win(void) {
 	}
 	// check for back-slant diaginal win 
 	for (int y = 0; y < 3; y++) {
-		for (int x = 0; x < 3; x++) {
+		for (int x = 0; x < 4; x++) {
 			if (thisGame.board[(y * BOARD_COLUMNS) + x + 0] != 
 				ASCII_FULL_STOP &&	
 
