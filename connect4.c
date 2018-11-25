@@ -65,7 +65,7 @@ int main(void)
 	}
 	else {
 		drawBoard();
-		printf("\nWay to go, %s!!!\n\n",
+		printf("\nWay to go, %s!!!!!\n\n",
 		    thisGame.turn % 2 == 0 ? thisGame.playerOne : thisGame.playerTwo);
 	}
 
