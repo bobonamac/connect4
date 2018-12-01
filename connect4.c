@@ -17,7 +17,7 @@
 #define BOARD_ROWS 6
 #define MAX_MOVES 42
 
-// data type declaration
+// data type and struct variable declaration
 struct game  {
 	int turn;
 	char move;
@@ -26,8 +26,8 @@ struct game  {
 	char board[BOARD_SQUARES];
 }thisGame;
 
-// prototypes
-char * playerName(void);
+// function prototypes
+char * getPlayerName(void);
 void drawBoard(void);
 void promptMove(void);
 int checkMove (void);
@@ -36,15 +36,15 @@ int win(void);
 int main(void)
 {
 	// assign starting values
- 	thisGame.turn = 1;
- 	// fill board array with chars 1-42
- 	for (int i = 0; i < BOARD_SQUARES; i++){
- 		thisGame.board[i] = ASCII_FULL_STOP;
- 	}
+	thisGame.turn = 1;
+	// fill board array with full-stop characters
+	for (int i = 0; i < BOARD_SQUARES; i++){
+		thisGame.board[i] = ASCII_FULL_STOP;
+	}
 
 	// get names and announce X and O
-	thisGame.playerOne = playerName();
-	thisGame.playerTwo = playerName();
+	thisGame.playerOne = getPlayerName();
+	thisGame.playerTwo = getPlayerName();
 	printf("\n%s gets x and %s gets o - let's go!!!\n", 
 			thisGame.playerOne, thisGame.playerTwo);
 
@@ -66,8 +66,11 @@ int main(void)
 	else {
 		drawBoard();
 		printf("\nWay to go, %s!!!!!\n\n",
-		    thisGame.turn % 2 == 0 ? thisGame.playerOne : thisGame.playerTwo);
+			thisGame.turn % 2 == 0 ? thisGame.playerOne : thisGame.playerTwo);
 	}
+
+	free(thisGame.playerOne);
+	free(thisGame.playerTwo);
 
 	return 0;
 }
@@ -75,14 +78,12 @@ int main(void)
 /*****************************************************************************/
 /*****************************************************************************/
 
-char * playerName(void) {
+char * getPlayerName(void) {
 	char * playerName = malloc(sizeof(char) * 25);
 	printf("Player name: "); 
 	scanf(" %s", playerName);
 
 	return playerName;
-
-	free(playerName);
 }
 
 /************************************/
@@ -97,8 +98,8 @@ void drawBoard(void) {
 			thisGame.board[i * BOARD_COLUMNS + 2], 
 			thisGame.board[i * BOARD_COLUMNS + 3], 
 			thisGame.board[i * BOARD_COLUMNS + 4], 
-		    thisGame.board[i * BOARD_COLUMNS + 5], 
-		    thisGame.board[i * BOARD_COLUMNS + 6]);
+			thisGame.board[i * BOARD_COLUMNS + 5], 
+			thisGame.board[i * BOARD_COLUMNS + 6]);
 	}
 	printf("\n");
 
@@ -122,9 +123,9 @@ void promptMove(void) {
 		}
 	}
 	while (scanVal == 0 || ((thisGame.move < ASCII_A) || 
-		  (thisGame.move > ASCII_g)) || 
-		  ((thisGame.move > ASCII_G) && (thisGame.move < ASCII_a)) ||
-	      (checkMove() == 1));
+		(thisGame.move > ASCII_g)) || 
+		((thisGame.move > ASCII_G) && (thisGame.move < ASCII_a)) ||
+		(checkMove() == 1));
 
 	return;
 }
@@ -146,9 +147,10 @@ int checkMove (void) {
 		printf("That column is full\n\n");
 		return 1;
 	}
+	// if not bottom row or taken, fills board with move
 	while ((thisGame.move < FIRST_ELEMENT_BOTTOM_ROW) &&
-	 		(thisGame.board[thisGame.move + BOARD_COLUMNS] != 'x') && 
-	 		(thisGame.board[thisGame.move + BOARD_COLUMNS] != 'o')) {
+			(thisGame.board[thisGame.move + BOARD_COLUMNS] != 'x') && 
+			(thisGame.board[thisGame.move + BOARD_COLUMNS] != 'o')) {
 		thisGame.move = thisGame.move + BOARD_COLUMNS;
 	}
 	// adds x or o to game board depending on turn
@@ -164,20 +166,20 @@ int win(void) {
 	// check for vertical win
 	for (int x = 0; x < 7; x++) {
 		for (int y = 0; y < 3; y++) {
-			if (thisGame.board[(y * BOARD_COLUMNS) + x + 0] != 
+			if (thisGame.board[((y + 0) * BOARD_COLUMNS) + x] != 
 				ASCII_FULL_STOP &&	
 
-				thisGame.board[(y * BOARD_COLUMNS) + x + 0] == 
-				thisGame.board[(y * BOARD_COLUMNS) + x + 7] &&
+				thisGame.board[((y + 0) * BOARD_COLUMNS) + x] == 
+				thisGame.board[((y + 1) * BOARD_COLUMNS) + x] &&
 
-			 	thisGame.board[(y * BOARD_COLUMNS) + x + 7] == 
-			 	thisGame.board[(y * BOARD_COLUMNS) + x + 14] && 
+				thisGame.board[((y + 1) * BOARD_COLUMNS) + x] == 
+				thisGame.board[((y + 2) * BOARD_COLUMNS) + x] && 
 
-			 	thisGame.board[(y * BOARD_COLUMNS) + x + 14] == 
-			 	thisGame.board[(y * BOARD_COLUMNS) + x + 21]) {
+				thisGame.board[((y + 2) * BOARD_COLUMNS) + x] == 
+				thisGame.board[((y + 3) * BOARD_COLUMNS) + x]) {
 				printf("\n\n\nChecking for win... \n\n\n - %c "
 					"wins vertically!\n", 
-					thisGame.board[(y * BOARD_COLUMNS) + x + 21]);
+					thisGame.board[((y + 3) * BOARD_COLUMNS) + x]);
 				return 1;
 			}
 		}
@@ -191,16 +193,16 @@ int win(void) {
 				thisGame.board[(y * BOARD_COLUMNS) + x + 0] == 
 				thisGame.board[(y * BOARD_COLUMNS) + x + 1] &&
 
-			 	thisGame.board[(y * BOARD_COLUMNS) + x + 1] == 
-			 	thisGame.board[(y * BOARD_COLUMNS) + x + 2] && 
+				thisGame.board[(y * BOARD_COLUMNS) + x + 1] == 
+				thisGame.board[(y * BOARD_COLUMNS) + x + 2] && 
 
-			 	thisGame.board[(y * BOARD_COLUMNS) + x + 2] == 
-			 	thisGame.board[(y * BOARD_COLUMNS) + x + 3]) {
+				thisGame.board[(y * BOARD_COLUMNS) + x + 2] == 
+				thisGame.board[(y * BOARD_COLUMNS) + x + 3]) {
 				printf("\n\n\nChecking for win... \n\n\n - %c "
 					"wins horizontally!\n", 
 					thisGame.board[(y * BOARD_COLUMNS) + x + 3]);
 				return 1;
-	        }
+			}
 		}
 	}
 	// check for back-slant diaginal win 
@@ -210,16 +212,16 @@ int win(void) {
 				ASCII_FULL_STOP &&	
 
 				thisGame.board[(y * BOARD_COLUMNS) + x + 0] == 
-				thisGame.board[(y * BOARD_COLUMNS) + x + 8] &&
+				thisGame.board[((y + 1) * BOARD_COLUMNS) + x + 1] &&
 
-			 	thisGame.board[(y * BOARD_COLUMNS) + x + 8] == 
-			 	thisGame.board[(y * BOARD_COLUMNS) + x + 16] && 
+				thisGame.board[((y + 1) * BOARD_COLUMNS) + x + 1] == 
+				thisGame.board[((y + 2) * BOARD_COLUMNS) + x + 2] && 
 
-			 	thisGame.board[(y * BOARD_COLUMNS) + x + 16] == 
-			 	thisGame.board[(y * BOARD_COLUMNS) + x + 24]) {
+				thisGame.board[((y + 2) * BOARD_COLUMNS) + x + 2] == 
+				thisGame.board[((y + 3) * BOARD_COLUMNS) + x + 3]) {
 				printf("\n\n\nChecking for win... \n\n\n - %c "
 					"wins back-slash diagonally!\n", 
-					thisGame.board[(y * BOARD_COLUMNS) + x + 24]);
+					thisGame.board[((y + 3) * BOARD_COLUMNS) + x + 3]);
 				return 1;
 			}
 		}
@@ -228,20 +230,20 @@ int win(void) {
 	// check for forward-slant diaginal win 
 	for (int y = 0; y < 3; y++) {
 		for (int x = 3; x < 7; x++) {
-			if (thisGame.board[(y * BOARD_COLUMNS) + x + 0] != 
+			if (thisGame.board[((y + 0) * BOARD_COLUMNS) + x - 0] != 
 				ASCII_FULL_STOP &&	
 
-				thisGame.board[(y * BOARD_COLUMNS) + x + 0] == 
-				thisGame.board[(y * BOARD_COLUMNS) + x + 6] &&
+				thisGame.board[((y + 0) * BOARD_COLUMNS) + x + 0] == 
+				thisGame.board[((y + 1) * BOARD_COLUMNS) + x - 1] &&
 
-			 	thisGame.board[(y * BOARD_COLUMNS) + x + 6] == 
-			 	thisGame.board[(y * BOARD_COLUMNS) + x + 12] && 
+				thisGame.board[((y + 1) * BOARD_COLUMNS) + x - 1] == 
+				thisGame.board[((y + 2) * BOARD_COLUMNS) + x - 2] && 
 
-			 	thisGame.board[(y * BOARD_COLUMNS) + x + 12] == 
-			 	thisGame.board[(y * BOARD_COLUMNS) + x + 18]) {
+				thisGame.board[((y + 2) * BOARD_COLUMNS) + x - 2] == 
+				thisGame.board[((y + 3) * BOARD_COLUMNS) + x - 3]) {
 				printf("\n\n\nChecking for win... \n\n\n - %c "
 					"wins forward-slash diaginally!\n", 
-					thisGame.board[(y * BOARD_COLUMNS) + x + 18]);
+					thisGame.board[((y + 3) * BOARD_COLUMNS) + x - 3]);
 				return 1;
 			}
 		}
@@ -253,7 +255,7 @@ int win(void) {
 		return 2;
 	}
 	else {
-		// prevents this message befor first move is made
+		// prevents this message before first move is made
 		if (thisGame.turn > 1) {
 			printf("\n\n\nChecking for win... \n\n\n     - no win\n");
 		}
