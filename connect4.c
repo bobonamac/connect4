@@ -36,7 +36,7 @@ bool win(void);
 
 /*
 	Needed changes:
-	- change win() to bool
+	- no message for full column
 	- fix multi-word player names
  	- fix multiple key input
 */
@@ -55,7 +55,7 @@ int main(void)
 	// get names and announce X and O
 	thisGame.playerOne = getPlayerName();
 	thisGame.playerTwo = getPlayerName();
-	printf("\n%s gets x and %s gets o - let's go!!!\n", 
+	printf("\n\n\n\n\n\n\n\n\n\n\n\n%s gets x and %s gets o - let's go!!!\n", 
 			thisGame.playerOne, thisGame.playerTwo);
 
 	// prompts for moves until win
@@ -63,17 +63,13 @@ int main(void)
 		drawBoard();
 		thisGame.turn++;
 		promptMove();
+		// check for no winner
+		if (thisGame.turn > MAX_MOVES) {
+			printf("\n\n\n\n\n\n\n\n\n\n\n\nChecking for win... \n\n\n - no winner\n");
+			break;
+		}
 	}
 	while (win() == false);
-
-	// check for no winner
-	if (thisGame.turn > MAX_MOVES) {
-		printf("\n\n\nChecking for win... \n\n\n - no winner.\n");
-	}
-	// prevents this message before first move is made
-	else if (thisGame.turn > 1) {
-		printf("\n\n\nChecking for win... \n\n\n     - no win\n");
-	}
 
 	// end of game winning board display and message
 	drawBoard();
@@ -84,7 +80,7 @@ int main(void)
 	}
 	else {
 		drawBoard();
-		printf("\nWay to go, %s!!!!!\n\n",
+		printf("Way to go, %s!!!!!\n\n",
 			thisGame.turn % 2 == 0 ? thisGame.playerOne : thisGame.playerTwo);
 	}
 
@@ -108,7 +104,7 @@ char * getPlayerName(void) {
 /************************************/
 
 void drawBoard(void) {
-	printf("\n\n");
+	printf("\n");
 	printf("   a b c d e f g\n");
 	for (int i = 0; i < BOARD_ROWS; i++) {
 		printf("   %c %c %c %c %c %c %c\n", 
@@ -266,6 +262,10 @@ bool win(void) {
 				return true;
 			}
 		}
+	}
+	// prevents this message before first move is made
+	if (thisGame.turn > 1) {
+		printf("\n\n\n\n\n\n\n\n\n\n\n\nChecking for win.....no winner yet\n");
 	}
 	return false;	
 }
