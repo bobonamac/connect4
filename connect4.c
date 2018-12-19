@@ -25,6 +25,8 @@ struct game  {
 	char * playerOne;
 	char * playerTwo;
 	char board[BOARD_SQUARES];
+	bool winTrue;
+	bool fullBoard;
 }thisGame;
 
 // function prototypes
@@ -36,8 +38,6 @@ bool win(void);
 
 /*
 	Needed changes:
-	- runs win() twice on win
-	- no message for full column
 	- fix multi-word player names
  	- fix multiple key input
 */
@@ -46,6 +46,8 @@ int main(void)
 {
 	// assign starting values
 	thisGame.turn = 1;
+	thisGame.winTrue = false;
+	thisGame.fullBoard = false;
 
 	// fill board array with full-stop characters
 	for (int i = 0; i < BOARD_SQUARES; i++){
@@ -65,22 +67,23 @@ int main(void)
 		promptMove();
 		// check for no winner
 		if (thisGame.turn > MAX_MOVES) {
-			printf("\n\n\n\n\n\n\n\n\n\n\n\nChecking for win... \n\n\n - no winner\n");
+			printf("\n\n\n\n\n\n\n\n\n\n\n\nChecking for win.....no winner\n");
+			thisGame.fullBoard = true;
 			break;
 		}
 	}
 	while (!win());
-
-	// end of game winning board display and message
-	drawBoard();
-	if (win()) {
+	// flips winTrue after breaking out of prompt move do/while
+	thisGame.winTrue = true;
+	// win message or no win message
+	if (thisGame.winTrue && !(thisGame.fullBoard)) {
 		drawBoard();
 		printf("Way to go, %s!!!!!\n\n",
 			thisGame.turn % 2 == 0 ? thisGame.playerOne : thisGame.playerTwo);
 	}
 	else {
 		drawBoard();
-		printf("Play again soon!\n\n");
+		printf("No Winner - Play again soon!\n\n");
 	}
 
 	free(thisGame.playerOne);
@@ -219,7 +222,7 @@ bool win(void) {
 			}
 		}
 	}
-	// check for back-slant diaginal win 
+	// check for back-slash diaginal win 
 	for (int y = 0; y < 3; y++) {
 		for (int x = 0; x < 4; x++) {
 			if (thisGame.board[(y * BOARD_COLUMNS) + x + 0] != 
@@ -241,7 +244,7 @@ bool win(void) {
 		}
 	}
 
-	// check for forward-slant diaginal win 
+	// check for forward-slash diaginal win 
 	for (int y = 0; y < 3; y++) {
 		for (int x = 3; x < 7; x++) {
 			if (thisGame.board[((y + 0) * BOARD_COLUMNS) + x - 0] != 
@@ -266,5 +269,6 @@ bool win(void) {
 	if (thisGame.turn > 1) {
 		printf("\n\n\n\n\n\n\n\n\n\n\n\nChecking for win.....no winner yet\n");
 	}
+
 	return false;	
 }
