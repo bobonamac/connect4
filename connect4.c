@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #define ASCII_FULL_STOP 46
 #define ASCII_0 48
@@ -31,12 +32,21 @@ char * getPlayerName(void);
 void drawBoard(void);
 void promptMove(void);
 int checkMove (void);
-int win(void);
+bool win(void);
+
+/*
+	Needed changes:
+	- change win() to bool
+	- fix multi-word player names
+ 	- fix multiple key input
+*/
+
 
 int main(void)
 {
 	// assign starting values
 	thisGame.turn = 1;
+
 	// fill board array with full-stop characters
 	for (int i = 0; i < BOARD_SQUARES; i++){
 		thisGame.board[i] = ASCII_FULL_STOP;
@@ -54,12 +64,21 @@ int main(void)
 		thisGame.turn++;
 		promptMove();
 	}
-	while (win() == 0);
+	while (win() == false);
+
+	// check for no winner
+	if (thisGame.turn > MAX_MOVES) {
+		printf("\n\n\nChecking for win... \n\n\n - no winner.\n");
+	}
+	// prevents this message before first move is made
+	else if (thisGame.turn > 1) {
+		printf("\n\n\nChecking for win... \n\n\n     - no win\n");
+	}
 
 	// end of game winning board display and message
 	drawBoard();
 
-	if (win() == 2) {
+	if (win() == false) {
 		drawBoard();
 		printf("Play again soon!\n\n");
 	}
@@ -161,7 +180,7 @@ int checkMove (void) {
 
 /************************************/
 
-int win(void) {
+bool win(void) {
 
 	// check for vertical win
 	for (int x = 0; x < 7; x++) {
@@ -180,7 +199,7 @@ int win(void) {
 				printf("\n\n\nChecking for win... \n\n\n - %c "
 					"wins vertically!\n", 
 					thisGame.board[((y + 3) * BOARD_COLUMNS) + x]);
-				return 1;
+				return true;
 			}
 		}
 	}
@@ -201,7 +220,7 @@ int win(void) {
 				printf("\n\n\nChecking for win... \n\n\n - %c "
 					"wins horizontally!\n", 
 					thisGame.board[(y * BOARD_COLUMNS) + x + 3]);
-				return 1;
+				return true;
 			}
 		}
 	}
@@ -222,7 +241,7 @@ int win(void) {
 				printf("\n\n\nChecking for win... \n\n\n - %c "
 					"wins back-slash diagonally!\n", 
 					thisGame.board[((y + 3) * BOARD_COLUMNS) + x + 3]);
-				return 1;
+				return true;
 			}
 		}
 	}
@@ -244,21 +263,9 @@ int win(void) {
 				printf("\n\n\nChecking for win... \n\n\n - %c "
 					"wins forward-slash diaginally!\n", 
 					thisGame.board[((y + 3) * BOARD_COLUMNS) + x - 3]);
-				return 1;
+				return true;
 			}
 		}
 	}
-
-	// check for no winner
-	if (thisGame.turn > MAX_MOVES) {
-		printf("\n\n\nChecking for win... \n\n\n - no winner.\n");
-		return 2;
-	}
-	else {
-		// prevents this message before first move is made
-		if (thisGame.turn > 1) {
-			printf("\n\n\nChecking for win... \n\n\n     - no win\n");
-		}
-		return 0;
-	}	
+	return false;	
 }
