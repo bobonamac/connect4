@@ -36,11 +36,11 @@ bool win(void);
 
 /*
 	Needed changes:
+	- runs win() twice on win
 	- no message for full column
 	- fix multi-word player names
  	- fix multiple key input
 */
-
 
 int main(void)
 {
@@ -69,19 +69,18 @@ int main(void)
 			break;
 		}
 	}
-	while (win() == false);
+	while (!win());
 
 	// end of game winning board display and message
 	drawBoard();
-
-	if (win() == false) {
-		drawBoard();
-		printf("Play again soon!\n\n");
-	}
-	else {
+	if (win()) {
 		drawBoard();
 		printf("Way to go, %s!!!!!\n\n",
 			thisGame.turn % 2 == 0 ? thisGame.playerOne : thisGame.playerTwo);
+	}
+	else {
+		drawBoard();
+		printf("Play again soon!\n\n");
 	}
 
 	free(thisGame.playerOne);
@@ -192,7 +191,7 @@ bool win(void) {
 
 				thisGame.board[((y + 2) * BOARD_COLUMNS) + x] == 
 				thisGame.board[((y + 3) * BOARD_COLUMNS) + x]) {
-				printf("\n\n\nChecking for win... \n\n\n - %c "
+				printf("\n\n\n\n\n\n\n\n\n\n\n\nChecking for win.....%c "
 					"wins vertically!\n", 
 					thisGame.board[((y + 3) * BOARD_COLUMNS) + x]);
 				return true;
@@ -213,7 +212,7 @@ bool win(void) {
 
 				thisGame.board[(y * BOARD_COLUMNS) + x + 2] == 
 				thisGame.board[(y * BOARD_COLUMNS) + x + 3]) {
-				printf("\n\n\nChecking for win... \n\n\n - %c "
+				printf("\n\n\n\n\n\n\n\n\n\n\n\nChecking for win.....%c "
 					"wins horizontally!\n", 
 					thisGame.board[(y * BOARD_COLUMNS) + x + 3]);
 				return true;
@@ -234,7 +233,7 @@ bool win(void) {
 
 				thisGame.board[((y + 2) * BOARD_COLUMNS) + x + 2] == 
 				thisGame.board[((y + 3) * BOARD_COLUMNS) + x + 3]) {
-				printf("\n\n\nChecking for win... \n\n\n - %c "
+				printf("\n\n\n\n\n\n\n\n\n\n\n\nChecking for win.....%c "
 					"wins back-slash diagonally!\n", 
 					thisGame.board[((y + 3) * BOARD_COLUMNS) + x + 3]);
 				return true;
@@ -256,7 +255,7 @@ bool win(void) {
 
 				thisGame.board[((y + 2) * BOARD_COLUMNS) + x - 2] == 
 				thisGame.board[((y + 3) * BOARD_COLUMNS) + x - 3]) {
-				printf("\n\n\nChecking for win... \n\n\n - %c "
+				printf("\n\n\n\n\n\n\n\n\n\n\n\nChecking for win.....%c "
 					"wins forward-slash diaginally!\n", 
 					thisGame.board[((y + 3) * BOARD_COLUMNS) + x - 3]);
 				return true;
