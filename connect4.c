@@ -133,11 +133,13 @@ void promptMove(void) {
 	do {
 		printf("%s - choose column a thru g: ", 
 		thisGame.turn % 2 == 0 ? thisGame.playerOne : thisGame.playerTwo);
-		scanVal = scanf(" %c", &thisGame.move);
-		// consumes remaining characters preventing perpetual loop
+		scanVal = scanf(" %1c", &thisGame.move);
+		fseek(stdin,0,SEEK_END);
+		// consumes remaining characters preventing perpetual loop???
 		if (scanVal == 0) {
 			scanf("%*s");	
 		}
+		printf("scanVal is %d\n", scanVal);
 	}
 	while (scanVal == 0 || ((thisGame.move < ASCII_A) || 
 		(thisGame.move > ASCII_g)) || 
