@@ -273,7 +273,7 @@ bool win(void) {
 				thisGame.board[((y + 2) * BOARD_COLUMNS) + x - 2] == 
 				thisGame.board[((y + 3) * BOARD_COLUMNS) + x - 3]) {
 				printf("\n\n\n\n\n\n\n\n\n\n\n\nChecking for win.....%c "
-					"wins forward-slash diaginally!\n", 
+					"wins forward-slash diagonally!\n", 
 					thisGame.board[((y + 3) * BOARD_COLUMNS) + x - 3]);
 				return true;
 			}
