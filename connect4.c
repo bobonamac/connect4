@@ -18,6 +18,12 @@
 #define BOARD_ROWS 6
 #define MAX_MOVES 42
 
+/*
+	Needed changes:
+	- fix multi-word player names
+ 	- fix multiple key input
+*/
+
 // data type and struct variable declaration
 struct game  {
 	int turn;
@@ -30,17 +36,12 @@ struct game  {
 }thisGame;
 
 // function prototypes
-char * getPlayerName(void);
+void fillBoard(void);
+void getPlayerNames(void);
 void drawBoard(void);
 void promptMove(void);
-int checkMove (void);
+bool makeMove (void);
 bool win(void);
-
-/*
-	Needed changes:
-	- fix multi-word player names
- 	- fix multiple key input
-*/
 
 int main(void)
 {
@@ -50,15 +51,10 @@ int main(void)
 	thisGame.fullBoard = false;
 
 	// fill board array with full-stop characters
-	for (int i = 0; i < BOARD_SQUARES; i++){
-		thisGame.board[i] = ASCII_FULL_STOP;
-	}
+	fillBoard();
 
 	// get names and announce X and O
-	thisGame.playerOne = getPlayerName();
-	thisGame.playerTwo = getPlayerName();
-	printf("\n\n\n\n\n\n\n\n\n\n\n\n%s gets x and %s gets o - let's go!!!\n", 
-			thisGame.playerOne, thisGame.playerTwo);
+	getPlayerNames();
 
 	// prompts for moves until win
 	do {
@@ -86,21 +82,38 @@ int main(void)
 		printf("No Winner - Play again soon!\n\n");
 	}
 
-	free(thisGame.playerOne);
-	free(thisGame.playerTwo);
-
 	return 0;
 }
 
 /*****************************************************************************/
 /*****************************************************************************/
 
-char * getPlayerName(void) {
-	char * playerName = malloc(sizeof(char) * 25);
-	printf("Player name: "); 
-	scanf(" %s", playerName);
+void fillBoard(void) {
+	for (int i = 0; i < BOARD_SQUARES; i++){
+	thisGame.board[i] = ASCII_FULL_STOP;
+	}
+}
 
-	return playerName;
+/************************************/
+
+void getPlayerNames(void) {
+	char * player1 = malloc(sizeof(char) * 25);
+	printf("Player name: "); 
+	scanf(" %s", player1);
+	thisGame.playerOne = player1;
+
+	char * player2 = malloc(sizeof(char) * 25);
+	printf("Player name: "); 
+	scanf(" %s", player2);
+	thisGame.playerTwo = player2;
+	
+	printf("\n\n\n\n\n\n\n\n\n\n\n\n%s gets x and %s gets o - let's go!!!\n", 
+			thisGame.playerOne, thisGame.playerTwo);
+
+	free(player1);
+	free(player2);
+
+	return;
 }
 
 /************************************/
@@ -139,19 +152,18 @@ void promptMove(void) {
 		if (scanVal == 0) {
 			scanf("%*s");	
 		}
-		printf("scanVal is %d\n", scanVal);
 	}
 	while (scanVal == 0 || ((thisGame.move < ASCII_A) || 
 		(thisGame.move > ASCII_g)) || 
 		((thisGame.move > ASCII_G) && (thisGame.move < ASCII_a)) ||
-		(checkMove() == 1));
+		!makeMove());
 
 	return;
 }
 
 /************************************/
 
-int checkMove (void) {
+bool makeMove (void) {
 
 	// converts UPPER to lower case, then to 0 thru 6 for array elements
 	if ((thisGame.move >= ASCII_A) && (thisGame.move <= ASCII_G)) {
@@ -164,7 +176,7 @@ int checkMove (void) {
 	// checks for full column
 	if (thisGame.board[thisGame.move] != ASCII_FULL_STOP) {
 		printf("That column is full\n\n");
-		return 1;
+		return false;
 	}
 	// if not bottom row or taken, fills board with move
 	while ((thisGame.move < FIRST_ELEMENT_BOTTOM_ROW) &&
@@ -175,7 +187,7 @@ int checkMove (void) {
 	// adds x or o to game board depending on turn
 	thisGame.board[thisGame.move] = (thisGame.turn % 2 == 0 ? 'x' : 'o');
 
-	return 0;
+	return true;
 }
 
 /************************************/
@@ -267,7 +279,7 @@ bool win(void) {
 			}
 		}
 	}
-	// prevents this message before first move is made
+	// prevents check-for-win message before first move is made
 	if (thisGame.turn > 1) {
 		printf("\n\n\n\n\n\n\n\n\n\n\n\nChecking for win.....no winner yet\n");
 	}
